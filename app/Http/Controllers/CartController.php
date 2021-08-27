@@ -22,9 +22,7 @@ class CartController extends Controller
                 'user_id' => Auth::id(),
                 'product_id' => $request->product_id,
                 'status' => false
-            ])->update([
-                'qty' => $available->qty + 1
-            ]);
+            ])->increment('qty');
         } else {
             Cart::create([
                 'user_id' => Auth::id(),
@@ -35,7 +33,7 @@ class CartController extends Controller
         }
         return response()->json([
             'status' => 1
-        ]);
+        ], 201);
     }
 
     public function get_cart()
