@@ -31,12 +31,12 @@
                 <div class="col-md-9">
                 </div>
                 <div class="col-md-3">
-                    <Cart :canLogin="canLogin"/>
+                    <breeze-cart :canLogin="canLogin"/>
                 </div>
             </div>
 
             <div class="row">
-                 <Product
+                 <breeze-product
                     v-for="item in products"
                     :key="item.id"
                     :product_id="item.id"
@@ -142,13 +142,13 @@
 </style>
 
 <script>
-    import Product from '../Components/Product'
-    import Cart from '../Components/Cart'
+    import BreezeProduct from '@/Components/Product'
+    import BreezeCart from '@/Components/Cart'
 
     export default {
         components: {
-            Product,
-            Cart
+            BreezeProduct,
+            BreezeCart
         },
         props: {
             canLogin: Boolean,

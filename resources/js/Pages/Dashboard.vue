@@ -21,12 +21,12 @@
                 <div class="col-md-9">
                 </div>
                 <div class="col-md-3">
-                    <Cart/>
+                    <breeze-cart/>
                 </div>
             </div>
 
             <div class="row">
-                <Product
+                <breeze-product
                     v-for="item in products"
                     :key="item.id"
                     :product_id="item.id"
@@ -44,14 +44,14 @@
 
 <script>
     import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
-    import Product from '../Components/Product'
-    import Cart from '../Components/Cart'
+    import BreezeProduct from '@/Components/Product'
+    import BreezeCart from '@/Components/Cart'
 
     export default {
         components: {
             BreezeAuthenticatedLayout,
-            Product,
-            Cart
+            BreezeProduct,
+            BreezeCart
         },
         props: {
             products: Array
