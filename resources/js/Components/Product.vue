@@ -7,14 +7,14 @@
             <h6 class="card-title">{{ name.split(':')[0] }} </h6>
                 <div class="card-text">Price: {{ currencyRp }}</div>
                 <div class="card-text">Stock: {{ qty }}</div>
-                <b-spinner small label="Small Spinner" v-if="loading" class="mt-auto mx-auto"></b-spinner>
-                <b-alert
-                :show="dismissSecs"
+                <div v-if="loading" class="spinner-border mt-auto mx-auto"></div>
+                <div
+                class="alert alert-primary"
                 variant="success"
                 v-if="success"
                 >
                 Added to cart <i class="fa fa-check"></i>
-                </b-alert>
+                </div>
                 <inertia-link v-if="canLogin" :href="route('login')" class="text-sm text-gray-700 underline">
                     <button class="btn btn-primary active mt-auto" >Add to cart <i class="fa fa-shopping-cart"></i></button>
                 </inertia-link>
@@ -31,7 +31,6 @@ import { mapActions } from 'vuex'
 export default {
     data () {
     return {
-      dismissSecs: 1,
       success: false,
       loading: false
     }
@@ -54,6 +53,10 @@ export default {
            .then(result => {
             this.loading = false
             this.success = true
+
+            setTimeout(() => {
+                this.success = false
+            }, 1000)
           })
           .catch(err => {
             this.$store.state.error = err
