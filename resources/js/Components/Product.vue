@@ -7,11 +7,18 @@
             <h6 class="card-title">{{ name.split(':')[0] }} </h6>
                 <div class="card-text">Price: {{ currencyRp }}</div>
                 <div class="card-text">Stock: {{ qty }}</div>
-
+                <b-spinner small label="Small Spinner" v-if="loading" class="mt-auto mx-auto"></b-spinner>
+                <b-alert
+                :show="dismissSecs"
+                variant="success"
+                v-if="success"
+                >
+                Added to cart <i class="fa fa-check"></i>
+                </b-alert>
                 <inertia-link v-if="canLogin" :href="route('login')" class="text-sm text-gray-700 underline">
                     <button class="btn btn-primary active mt-auto" >Add to cart <i class="fa fa-shopping-cart"></i></button>
                 </inertia-link>
-                <button v-else class="btn btn-primary active mt-auto" @click="addToCart(product_id, price)">Add to cart <i class="fa fa-shopping-cart"></i></button>
+                <button v-else class="btn btn-primary active mt-auto" @click="cart(product_id, price)">Add to cart <i class="fa fa-shopping-cart"></i></button>
 
             </div>
         </div>         
@@ -19,8 +26,16 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 
 export default {
+    data () {
+    return {
+      dismissSecs: 1,
+      success: false,
+      loading: false
+    }
+  },
     props: ['image', 'name', 'product_id', 'qty', 'price', 'canLogin'],
     computed: {
         currencyRp() {
@@ -28,12 +43,22 @@ export default {
         }
     },
     methods: {
-    addToCart (product_id, qty) {
+    ...mapActions(['addToCart']),
+    cart(product_id, qty) {
+        this.loading = true
         const data = {
             product_id,
             qty
         }
-            this.$inertia.post(route('add_to_cart'), data)
+        this.addToCart(data)
+           .then(result => {
+            this.loading = false
+            this.success = true
+          })
+          .catch(err => {
+            this.$store.state.error = err
+            this.loading = false
+          })
         }
     }
 }
