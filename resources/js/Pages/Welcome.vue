@@ -31,7 +31,7 @@
                 <div class="col-md-9">
                 </div>
                 <div class="col-md-3">
-                    <Cart :login="canLogin"/>
+                    <Cart :canLogin="canLogin"/>
                 </div>
             </div>
 
@@ -44,6 +44,7 @@
                     :image="item.image_url"
                     :price="item.price"
                     :qty="item.qty"
+                    :canLogin="canLogin"
                 />
             </div>
         </div>

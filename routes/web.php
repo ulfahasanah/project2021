@@ -30,7 +30,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', 'ProductController@index')->middleware(['auth', 'verified'])->name('dashboard');
-Route::post('/cart/add', 'CartController@add_cart')->middleware(['auth', 'verified']);
+Route::post('/cart/add', 'CartController@add_cart')->middleware(['auth', 'verified'])->name('add_to_cart');
 Route::get('/cart/get', 'CartController@get_cart')->middleware(['auth', 'verified']);
 
 
