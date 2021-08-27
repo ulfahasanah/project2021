@@ -8,6 +8,7 @@ import { InertiaProgress } from '@inertiajs/progress';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import stores from './stores/stores'
 
 const el = document.getElementById('app');
 
@@ -20,6 +21,7 @@ createApp({
 })
     .mixin({ methods: { route } })
     .use(InertiaPlugin)
+    .use(stores)
     .mount(el);
 
 InertiaProgress.init({ color: '#4B5563' });
