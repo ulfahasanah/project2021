@@ -38,9 +38,31 @@ class CartController extends Controller
 
     public function get_cart()
     {
-        $data = Cart::where('user_id', Auth::id())->get();
+        $data = Cart::with('product')->where('user_id', Auth::id())->orderBy('id')->get();
         return $data;
     }
 
+    public function update_cart(Request $request, $id)
+    {
+        if($request->data == 'plus') {
+            $result = Cart::
+            where('user_id', Auth::id())
+            ->where('id', $id)
+            ->increment('qty');
+        } else if($request->data == 'minus') {
+            $result = Cart::
+            where('user_id', Auth::id())
+            ->where('id', $id)
+            ->decrement('qty');
+        } else {
+            $result = Cart::
+            where('user_id', Auth::id())
+            ->where('id', $id)
+            ->update([
+                'qty' => $request->data
+            ]);
+        }
+        return $result;
+    }
 
 }

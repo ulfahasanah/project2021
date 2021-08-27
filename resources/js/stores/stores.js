@@ -35,12 +35,20 @@ const stores = new createStore({
             const filterFalse = data.filter(el => {
               return el.status === false
             })
+            console.log(filterFalse, "---filter")
             context.commit('SET_CART', filterFalse)
             context.commit('SET_LOADING', false)
           })
           .catch(err => {
             context.commit('SHOW_ERROR', err.response.data.error)
             context.commit('SET_LOADING', false)
+          })
+        },
+        updateCart(context, data) {
+          return axios({
+            method: 'PUT',
+            url: `/cart/update/${data.id}`,
+            data,
           })
         }
     }
