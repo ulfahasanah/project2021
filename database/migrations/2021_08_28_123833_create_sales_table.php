@@ -20,6 +20,8 @@ class CreateSalesTable extends Migration
             $table->string('product_id');
             $table->double('qty');
             $table->integer('total_price');
+            $table->integer('total_discount');
+            $table->integer('total_paid');
             $table->timestamps();
         });
     }

@@ -39,10 +39,21 @@ class RegisteredUserController extends Controller
             'password' => 'required|string|confirmed|min:8',
         ]);
 
+        $identity_card_pic = $request->file('ktp');
+
+        $identity_card_pic_name = time()."_".$identity_card_pic->getClientOriginalName();
+
+        $identity_card_pic_path = public_path('images/identity_card');
+
+        $identity_card_pic->move($identity_card_pic_path, $identity_card_pic_name);
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'contact' => $request->contact,
+            'address' => $request->address,
+            'ktp' => $identity_card_pic_name
         ]);
 
         event(new Registered($user));

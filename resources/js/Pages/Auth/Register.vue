@@ -22,6 +22,21 @@
             <breeze-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
         </div>
 
+         <div>
+            <breeze-label for="contact" value="Contact" />
+            <breeze-input id="contact" type="text" class="mt-1 block w-full" v-model="form.contact" required autofocus autocomplete="contact" />
+        </div>
+
+        <div>
+            <breeze-label for="address" value="Address" />
+            <breeze-input id="address" type="text" class="mt-1 block w-full" v-model="form.address" required autofocus autocomplete="address" />
+        </div>
+
+         <div>
+            <breeze-label for="ktp" value="ID Card" />
+            <breeze-input id="ktp" type="file" class="mt-1 block w-full"  @input="form.ktp = $event.target.files[0]" required autofocus autocomplete="ktp" />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <inertia-link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
                 Already registered?
@@ -40,6 +55,7 @@
     import BreezeInput from '@/Components/Input'
     import BreezeLabel from '@/Components/Label'
     import BreezeValidationErrors from '@/Components/ValidationErrors'
+    import { useForm } from '@inertiajs/inertia-vue3'
 
     export default {
         layout: BreezeGuestLayout,
@@ -50,25 +66,24 @@
             BreezeLabel,
             BreezeValidationErrors,
         },
+        setup () {
+            const form = useForm({
+                name: null,
+                email: null,
+                password: null,
+                password_confirmation: null,
+                contact: null,
+                address: null,
+                ktp: null,
+            })
 
-        data() {
-            return {
-                form: this.$inertia.form({
-                    name: '',
-                    email: '',
-                    password: '',
-                    password_confirmation: '',
-                    terms: false,
+            function submit() {
+                form.post('/register', {
+                    onFinish: () => form.reset('password', 'password_confirmation'),
                 })
             }
-        },
 
-        methods: {
-            submit() {
-                this.form.post(this.route('register'), {
-                    onFinish: () => this.form.reset('password', 'password_confirmation'),
-                })
-            }
+            return { form, submit }
         }
     }
 </script>

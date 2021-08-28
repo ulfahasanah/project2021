@@ -10,9 +10,6 @@ const stores = new createStore({
       SET_CART (state, cart) {
         state.cart = cart
       },
-      SET_LOADING (state, boolean) {
-        state.loading = boolean
-      },
       SHOW_MESSAGE (state, message) {
         state.message = message
       }
@@ -26,7 +23,6 @@ const stores = new createStore({
             })
           },
         getCart(context) {
-          context.commit('SET_LOADING', true)
            axios({
             method: 'GET',
             url: '/cart/get'
@@ -36,11 +32,8 @@ const stores = new createStore({
               return el.status === false
             })
             context.commit('SET_CART', filterFalse)
-            context.commit('SET_LOADING', false)
           })
           .catch(err => {
-            context.commit('SHOW_ERROR', err.response.data.error)
-            context.commit('SET_LOADING', false)
           })
         },
         updateCart(context, data) {

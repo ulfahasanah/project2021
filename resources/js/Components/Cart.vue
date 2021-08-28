@@ -73,9 +73,23 @@
                                         </td>
                                     </tr>
                                     <tr class="bg-gray-100">
-                                        <td colspan="3" class="p-2 text-gray-500 text-right">Total Price :</td>
+                                        <td colspan="3" class="p-2 text-gray-500 text-right">Total :</td>
                                         <td class="p-2">
                                             <span class="bg-green-400 text-gray-50 rounded-md px-2">Rp{{total().toLocaleString()}}</span>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="bg-gray-100">
+                                        <td colspan="3" class="p-2 text-gray-500 text-right">Total Discount :</td>
+                                        <td class="p-2">
+                                            <span class="bg-green-400 text-gray-50 rounded-md px-2">Rp {{totalDiscount().toLocaleString()}}</span>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr class="bg-gray-100">
+                                        <td colspan="3" class="p-2 text-gray-500 text-right">Grand Total :</td>
+                                        <td class="p-2">
+                                            <span class="bg-green-400 text-gray-50 rounded-md px-2">Rp {{ (total() - totalDiscount()).toLocaleString() }}</span>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -124,7 +138,9 @@ export default {
    },
    data() {
       return {
-         isOpen: false
+         isOpen: false,
+         total_discount: 0,
+         total_paid: 0
       }
    },
     props: ['canLogin'],
@@ -150,13 +166,33 @@ export default {
       },  
       total () {
         return this.cart.reduce((accumulation, currentValue) => accumulation + (currentValue.product.price * currentValue.qty), 0)
-        },
+      },
+      totalDiscount() {
+            let discount;
+            const totalPrice = this.total()
+
+            if(this.cart[0].user.discount_type == 'percentage') {
+                discount = totalPrice * parseFloat(this.cart[0].user.discount)/100
+            } else if(this.cart[0].user.discount_type == 'fix') {
+                discount = +this.cart[0].user.discount
+            } else {
+                discount = 0
+            }
+            
+            this.total_discount = discount
+            this.total_paid = this.total() - discount
+            return discount
+      },
      deleteProduct(id){
          this.deleteCart(id)
          this.getCart()
      },
      buy(){
-         const cart = this.cart
+         const cart = {
+             cart: this.cart,
+             total_paid: this.total_paid,
+             total_discount: this.total_discount
+         }
          this.checkout(cart)
           .then(result => {
             this.setMessage(true)

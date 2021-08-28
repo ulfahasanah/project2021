@@ -39,7 +39,7 @@ class CartController extends Controller
 
     public function get_cart()
     {
-        $data = Cart::with('product')->where('user_id', Auth::id())->orderBy('id')->get();
+        $data = Cart::with('product', 'user')->where('user_id', Auth::id())->orderBy('id')->get();
         return $data;
     }
 
@@ -77,14 +77,11 @@ class CartController extends Controller
 
     public function checkout(Request $request)
     {
-        $content = $request->getContent();
-        $data = json_decode($content, true);
-
         $product_id = array();
         $total_price = 0;
         $qty = 0;
 
-        foreach ($data as $value) {
+        foreach ($request->cart as $value) {
 
             Cart::
             where('user_id', Auth::id())
@@ -99,7 +96,7 @@ class CartController extends Controller
             ]);
 
             array_push($product_id, $value['product_id']);
-            $total_price += $value['product']['price'];
+            $total_price += ($value['product']['price'] * $value['qty']);
             $qty += $value['qty'];
 
         }
@@ -111,7 +108,9 @@ class CartController extends Controller
             'user_id' => Auth::id(),
             'product_id' => $product_id,
             'total_price' => $total_price,
-            'qty' => $qty
+            'qty' => $qty,
+            'total_discount' => $request->total_discount,
+            'total_paid' => $request->total_paid
         ]);
 
         return response()->json([

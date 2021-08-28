@@ -12,10 +12,13 @@
         </div>
 
         <div class="container">
+            <h1>Transaction</h1>
             <div class="row"  v-for="val in sales" :key="val.id">
                  <div class="card mb-2">
                     <span class="text-dark"> CODE: {{ val.code }}</span>
                     <span class="text-dark"> PRICE: {{ val.total_price }}</span>
+                    <span class="text-dark"> DISCOUNT: {{ val.total_discount }}</span>
+                    <span class="text-dark"> GRAND TOTAL: {{ val.total_paid }}</span>
                 </div>
             </div>
         </div>
