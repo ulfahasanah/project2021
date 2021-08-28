@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Cart;
+use App\Models\Sale;
 use Auth;
 
 class CartController extends Controller
@@ -79,6 +80,10 @@ class CartController extends Controller
         $content = $request->getContent();
         $data = json_decode($content, true);
 
+        $product_id = array();
+        $total_price = 0;
+        $qty = 0;
+
         foreach ($data as $value) {
 
             Cart::
@@ -93,7 +98,21 @@ class CartController extends Controller
                 'qty' => $value['product']['qty'] - $value['qty']
             ]);
 
+            array_push($product_id, $value['product_id']);
+            $total_price += $value['product']['price'];
+            $qty += $value['qty'];
+
         }
+
+        $product_id = implode(",", $product_id);
+
+        Sale::create([
+            'code' => 'SALE-' . date('y-m-d') . '-' . date('H:i:s'),
+            'user_id' => Auth::id(),
+            'product_id' => $product_id,
+            'total_price' => $total_price,
+            'qty' => $qty
+        ]);
 
         return response()->json([
             'status' => 'success'
