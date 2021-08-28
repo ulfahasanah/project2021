@@ -132,7 +132,7 @@ export default {
       ...mapState(['cart'])
    },
     methods: {
-      ...mapActions(['getCart', 'updateCart', 'deleteCart', 'checkout']),
+      ...mapActions(['getCart', 'updateCart', 'deleteCart', 'checkout', 'setMessage']),
       openModal() {
          this.isOpen = true
       },
@@ -158,8 +158,16 @@ export default {
      buy(){
          const cart = this.cart
          this.checkout(cart)
+          .then(result => {
+            this.setMessage(true)
+          })
          this.isOpen = false
          this.getCart()
+         this.$inertia.visit('dashboard');
+         setTimeout(() => {
+             this.setMessage('')
+         }, 3000);
+
      }
 
     },

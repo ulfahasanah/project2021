@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const stores = new createStore({
     state: {
-        error: '',
+        message: '',
         cart: [],
     },
     mutations: {
@@ -13,8 +13,8 @@ const stores = new createStore({
       SET_LOADING (state, boolean) {
         state.loading = boolean
       },
-      SHOW_ERROR (state, error) {
-        state.error = error
+      SHOW_MESSAGE (state, message) {
+        state.message = message
       }
     },
     actions: {
@@ -35,7 +35,6 @@ const stores = new createStore({
             const filterFalse = data.filter(el => {
               return el.status === false
             })
-            console.log(filterFalse, "---filter")
             context.commit('SET_CART', filterFalse)
             context.commit('SET_LOADING', false)
           })
@@ -63,6 +62,9 @@ const stores = new createStore({
             url: '/cart/checkout',
             data,
           })
+        },
+        setMessage(context, data) {
+          context.commit('SHOW_MESSAGE', data)
         }
     }
 })

@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $product = Product::get();
+        $product = Product::orderBy('id', 'asc')->get();
 
         return Inertia::render('Dashboard', [
             'products' => $product
