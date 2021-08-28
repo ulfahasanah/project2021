@@ -50,6 +50,12 @@ const stores = new createStore({
             url: `/cart/update/${data.id}`,
             data,
           })
+        },
+        deleteCart(context, id){
+          return axios({
+            method: 'DELETE',
+            url: `/cart/${id}`
+          })
         }
     }
 })

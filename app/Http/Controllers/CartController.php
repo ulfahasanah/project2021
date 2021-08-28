@@ -65,4 +65,13 @@ class CartController extends Controller
         return $result;
     }
 
+    public function delete_cart($id)
+    {
+        $result = Cart::
+            where('user_id', Auth::id())
+            ->where('id', $id)
+            ->delete();
+        return $result;
+    }
+
 }

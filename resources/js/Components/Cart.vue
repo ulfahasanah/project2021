@@ -68,7 +68,7 @@
                                         </td>
                                         <td class="p-3 ">
                                             <button>
-                                                <TrashIcon class="h-10 w-7 text-blue-500"/>
+                                                <TrashIcon class="h-10 w-7 text-blue-500" @click="deleteProduct(item.id)"/>
                                             </button>
                                         </td>
                                     </tr>
@@ -129,7 +129,7 @@ export default {
       ...mapState(['cart'])
    },
     methods: {
-      ...mapActions(['getCart', 'updateCart']),
+      ...mapActions(['getCart', 'updateCart', 'deleteCart']),
       openModal() {
          this.isOpen = true
       },
@@ -147,7 +147,11 @@ export default {
       },  
       total () {
         return this.cart.reduce((accumulation, currentValue) => accumulation + (currentValue.product.price * currentValue.qty), 0)
-        }
+        },
+     deleteProduct(id){
+         this.deleteCart(id)
+         this.getCart()
+     }
 
     },
     created () {

@@ -33,6 +33,7 @@ Route::get('/dashboard', 'ProductController@index')->middleware(['auth', 'verifi
 Route::post('/cart/add', 'CartController@add_cart')->middleware(['auth', 'verified'])->name('add_to_cart');
 Route::get('/cart/get', 'CartController@get_cart')->middleware(['auth', 'verified']);
 Route::put('/cart/update/{id}', 'CartController@update_cart')->middleware(['auth', 'verified']);
+Route::delete('/cart/{id}', 'CartController@delete_cart')->middleware(['auth', 'verified']);
 
 
 require __DIR__.'/auth.php';

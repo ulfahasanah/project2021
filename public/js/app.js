@@ -22323,7 +22323,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: ['canLogin'],
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapState)(['cart'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)(['getCart', 'updateCart'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)(['getCart', 'updateCart', 'deleteCart'])), {}, {
     openModal: function openModal() {
       this.isOpen = true;
     },
@@ -22343,6 +22343,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.cart.reduce(function (accumulation, currentValue) {
         return accumulation + currentValue.product.price * currentValue.qty;
       }, 0);
+    },
+    deleteProduct: function deleteProduct(id) {
+      this.deleteCart(id);
+      this.getCart();
     }
   }),
   created: function created() {
@@ -22548,7 +22552,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return "Rp".concat(this.price.toLocaleString('id-ID'));
     }
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['addToCart'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['addToCart', 'getCart'])), {}, {
     cart: function cart(product_id, qty) {
       var _this = this;
 
@@ -22563,6 +22567,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         setTimeout(function () {
           _this.success = false;
         }, 1000);
+
+        _this.getCart();
       })["catch"](function (err) {
         _this.$store.state.error = err;
         _this.loading = false;
@@ -23340,8 +23346,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["onClick"]))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_20, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_21, "Rp" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((item.product.price * item.qty).toLocaleString()), 1
     /* TEXT */
     )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_TrashIcon, {
-      "class": "h-10 w-7 text-blue-500"
-    })])])]);
+      "class": "h-10 w-7 text-blue-500",
+      onClick: function onClick($event) {
+        return $options.deleteProduct(item.id);
+      }
+    }, null, 8
+    /* PROPS */
+    , ["onClick"])])])]);
   }), 128
   /* KEYED_FRAGMENT */
   )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", _hoisted_23, [_hoisted_24, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", _hoisted_25, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_26, "Rp" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.total().toLocaleString()), 1
@@ -25069,6 +25080,12 @@ var stores = new vuex__WEBPACK_IMPORTED_MODULE_1__.createStore({
         method: 'PUT',
         url: "/cart/update/".concat(data.id),
         data: data
+      });
+    },
+    deleteCart: function deleteCart(context, id) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'DELETE',
+        url: "/cart/".concat(id)
       });
     }
   }

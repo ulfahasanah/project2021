@@ -42,7 +42,7 @@ export default {
         }
     },
     methods: {
-    ...mapActions(['addToCart']),
+    ...mapActions(['addToCart', 'getCart']),
     cart(product_id, qty) {
         this.loading = true
         const data = {
@@ -57,6 +57,7 @@ export default {
             setTimeout(() => {
                 this.success = false
             }, 1000)
+            this.getCart()
           })
           .catch(err => {
             this.$store.state.error = err
