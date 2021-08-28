@@ -56,6 +56,13 @@ const stores = new createStore({
             method: 'DELETE',
             url: `/cart/${id}`
           })
+        },
+        checkout(context, data){
+          return axios({
+            method: 'POST',
+            url: '/cart/checkout',
+            data,
+          })
         }
     }
 })

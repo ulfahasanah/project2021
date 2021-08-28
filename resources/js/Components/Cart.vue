@@ -49,12 +49,12 @@
                                                  <button v-else @click="updateQuantity(item.id, 'plus')">
                                                     <PlusCircleIcon class="h-10 w-6 text-blue-500"/>
                                                 </button>
-                                                <input type="number"
+                                                <input readonly type="number"
                                                     class="text-gray-500"
                                                     @change="updateQuantity(item.id, $event)"
                                                     :min="1" 
                                                     :max="item.product.qty"
-                                                    :value="+item.qty > +item.product.qty ? +item.product.qty : +item.qty < 1 ? 1 : +item.qty"/>
+                                                    :value="+item.qty"/>
                                                 <button  v-if="item.qty == 1" disabled class="disabled:opacity-50">
                                                     <MinusCircleIcon class="h-10 w-6 text-blue-500"/>
                                                 </button>
@@ -86,6 +86,9 @@
                                 <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
                                     <button @click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                                         Cancel
+                                    </button>
+                                    <button @click="buy()" type="button" class="mx-2 px-4 py-2 bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex">
+                                        Buy
                                     </button>
                                 </span>
                             </div>
@@ -129,7 +132,7 @@ export default {
       ...mapState(['cart'])
    },
     methods: {
-      ...mapActions(['getCart', 'updateCart', 'deleteCart']),
+      ...mapActions(['getCart', 'updateCart', 'deleteCart', 'checkout']),
       openModal() {
          this.isOpen = true
       },
@@ -150,6 +153,12 @@ export default {
         },
      deleteProduct(id){
          this.deleteCart(id)
+         this.getCart()
+     },
+     buy(){
+         const cart = this.cart
+         this.checkout(cart)
+         this.isOpen = false
          this.getCart()
      }
 

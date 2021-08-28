@@ -74,4 +74,31 @@ class CartController extends Controller
         return $result;
     }
 
+    public function checkout(Request $request)
+    {
+        $content = $request->getContent();
+        $data = json_decode($content, true);
+
+        foreach ($data as $value) {
+
+            Cart::
+            where('user_id', Auth::id())
+            ->where('id', $value['id'])
+            ->update([
+                'status' => true
+            ]);
+
+            Product::where('id', $value['product_id'])
+            ->update([
+                'qty' => $value['product']['qty'] - $value['qty']
+            ]);
+
+        }
+
+        return response()->json([
+            'status' => 'success'
+        ], 200);
+       
+    }
+
 }

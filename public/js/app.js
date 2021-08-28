@@ -22323,7 +22323,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   props: ['canLogin'],
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapState)(['cart'])),
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)(['getCart', 'updateCart', 'deleteCart'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)(['getCart', 'updateCart', 'deleteCart', 'checkout'])), {}, {
     openModal: function openModal() {
       this.isOpen = true;
     },
@@ -22346,6 +22346,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     deleteProduct: function deleteProduct(id) {
       this.deleteCart(id);
+      this.getCart();
+    },
+    buy: function buy() {
+      var cart = this.cart;
+      this.checkout(cart);
+      this.isOpen = false;
       this.getCart();
     }
   }),
@@ -23322,6 +23328,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     })], 8
     /* PROPS */
     , ["onClick"])), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+      readonly: "",
       type: "number",
       "class": "text-gray-500",
       onChange: function onChange($event) {
@@ -23329,7 +23336,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       },
       min: 1,
       max: item.product.qty,
-      value: +item.qty > +item.product.qty ? +item.product.qty : +item.qty < 1 ? 1 : +item.qty
+      value: +item.qty
     }, null, 40
     /* PROPS, HYDRATE_EVENTS */
     , ["onChange", "max", "value"]), item.qty == 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_MinusCircleIcon, {
@@ -23363,7 +23370,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     type: "button",
     "class": "inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-  }, " Cancel ")])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }, " Cancel "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+    onClick: _cache[3] || (_cache[3] = function ($event) {
+      return $options.buy();
+    }),
+    type: "button",
+    "class": "mx-2 px-4 py-2 bg-blue-600 rounded-md text-white outline-none focus:ring-4 shadow-lg transform active:scale-y-75 transition-transform flex"
+  }, " Buy ")])])])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -25086,6 +25099,13 @@ var stores = new vuex__WEBPACK_IMPORTED_MODULE_1__.createStore({
       return axios__WEBPACK_IMPORTED_MODULE_0___default()({
         method: 'DELETE',
         url: "/cart/".concat(id)
+      });
+    },
+    checkout: function checkout(context, data) {
+      return axios__WEBPACK_IMPORTED_MODULE_0___default()({
+        method: 'POST',
+        url: '/cart/checkout',
+        data: data
       });
     }
   }
